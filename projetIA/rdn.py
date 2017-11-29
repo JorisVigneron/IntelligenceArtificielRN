@@ -45,6 +45,7 @@ prediction = tf.nn.softmax(logits)
 
 #define loss and optimizer
 loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits,labels=Y))
+#optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
 optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate)
 train_op = optimizer.minimize(loss_op)
 
