@@ -23,11 +23,11 @@ import tensorflow as tf
 learning_rate = 0.1
 num_steps = 1000
 batch_size = 128
-display_step = 100
+display_step = 10
 
 # Network Parameters
-n_hidden_1 = 64 # 1st layer number of neurons
-n_hidden_2 = 64 # 2nd layer number of neurons
+n_hidden_1 = 128 # 1st layer number of neurons
+n_hidden_2 = 128 # 2nd layer number of neurons
 num_input = 784 # MNIST data input (img shape: 28*28)
 num_classes = 10 # MNIST total classes (0-9 digits)
 
@@ -63,9 +63,10 @@ logits = neural_net(X)
 prediction = tf.nn.softmax(logits)
 
 # Define loss and optimizer
-loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(
-    logits=logits, labels=Y))
-optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
+#loss_op = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=Y))
+loss_op = tf.reduce_sum(tf.pow(prediction-Y, 2))/(2*batch_size)
+#optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate)
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=learning_rate)
 train_op = optimizer.minimize(loss_op)
 
 # Evaluate model
