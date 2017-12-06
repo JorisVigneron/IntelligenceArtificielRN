@@ -1,26 +1,27 @@
 from __future__ import print_function
 
 import tensorflow as tf
+import extractor as ext
 
-#Paramètre
+#Parametre
 learning_rate = 0.1 	#indice d'apprentissage
-num_steps = 1000    	#nombre d'étape
+num_steps = 100   	#nombre d'etape
 batch_size = 10		#taille des batch - inutile
-display_step = 100	#fréquence d'affichage
+display_step = 10	#frequence daffichage
 
-#Paramètre du réseau
+#Parametre du reseau
 n_hidden_1 = 64		#nombre de neurones couche 1
 n_hidden_2 = 64		#nombre de neurones couche 2
-num_input = 32		#nombre d'entrée, à changer en fonction du réseau 
-num_classes = 2		#nombre de sortie attendue toujours 2 => lors de la création du batch de sortie, prévoir 2 colonnes 1 pour chaque sortie
+num_input = 32		#nombre dentree a changer en fonction du reseau 
+num_classes = 2		#nombre de sortie attendue toujours 2 => lors de la creation du batch de sortie, prevoir 2 colonnes 1 pour chaque sortie
 
 #tf Graph input
-X = tf.placeholder("float",[None,num_input])		#configuration de l'ensemble des entrées
-Y = tf.placeholder("float",[None,num_classes])		#configuration de l'ensemble des sorties
+X = tf.placeholder("float",[None,num_input])		#configuration de lensemble des entrees
+Y = tf.placeholder("float",[None,num_classes])		#configuration de lensemble des sorties
 
 #Store layers weight et bias
 weights = {
-    'h1': tf.Variable(tf.random_normal([num_input,n_hidden_1])),	#initialisation des poids entrées - couche 1
+    'h1': tf.Variable(tf.random_normal([num_input,n_hidden_1])),	#initialisation des poids entrees - couche 1
     'h2': tf.Variable(tf.random_normal([n_hidden_1,n_hidden_2])),	#initialisation des poids couche 1 - couche 2
     'out': tf.Variable(tf.random_normal([n_hidden_2,num_classes]))	#initialisation des poids couche 2 - sortie
 }
@@ -39,8 +40,8 @@ def neural_net(x):
     return out_layer
 
 
-#construct modelœ
-logits = neural_net(X)							#création réseau de neurones
+#construct modele
+logits = neural_net(X)							#creation reseau de neurones
 prediction = tf.nn.softmax(logits)					#lissage de la sortie
 
 #define loss and optimizer
@@ -58,14 +59,24 @@ init = tf.global_variables_initializer()				#initialisation des variables global
 
 #start training
 with tf.Session() as sess:
-    sess.run(init)							#run de l'init
+    sess.run(init)							#run de linit
+    ll = ext.extractor_1("wpbc.data")
+    l = ext.extractor_utils(ll)
+    lll = ext.extractor_res(ll)
+    a = ext.list_string_to_int(lll)
+    b = ext.double_sortie(a)
+    batch_x = l[:150]
+    test_x = l[150:]
+    batch_y = b[:150]
+    test_y = b[150:]
+    print(len(batch_x))
+    print(len(batch_y))
+    for step in range(1, num_steps+1):					#boucle dapprentissage
+         					#recuperation des donnees
 
-    for step in range(1, num_steps+1):					#boucle d'apprentissage
-        batch_x, batch_y = #						#récupération des données
-
-        sess.run(train_op, feed_dict={X: batch_x, Y:batch_y})		#lancement de l'apprentissage
-        if step % display_step == 0 or step = 1:			#affichage
-            loss, acc = sess.run([loss_op, accuracy], feed_dict={X:batch_x, Y: batch_y}) 	#calcul de l'erreur
+        sess.run(train_op, feed_dict={X: batch_x, Y:batch_y})		#lancement de lapprentissage
+        if step % display_step == 0 or step == 1:			#affichage
+            loss, acc = sess.run([loss_op, accuracy], feed_dict={X:batch_x, Y: batch_y}) 	#calcul de lerreur
             print("Step " + str(step) + ", Minibatch Loss= " + \
                   "{:.4f}".format(loss) + ", Training Accuracy= " + \
                   "{:.3f}".format(acc))

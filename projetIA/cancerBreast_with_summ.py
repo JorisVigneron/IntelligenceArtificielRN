@@ -12,8 +12,8 @@ def train():
 	#import data
 	sess = tf.InteractiveSession()
 	with tf.name_scope('input'):
-		x = tf.placeholder(tf.float32, [None,..], name='x-input')
-		y = tf.placeholder(tf.float32, [None,..], name='y-input')
+		x = tf.placeholder(tf.float32, [None,32], name='x-input')
+		y = tf.placeholder(tf.float32, [None,2], name='y-input')
 	
 	#with tf.name_scope('input_reshape'):
 	def weight_variable(shape):
@@ -50,14 +50,14 @@ def train():
          	tf.summary.histogram('activations', activations)
       	 	return activations
 
-	hidden1 = nn_layer(x, 784, 500, 'layer1')
+	hidden1 = nn_layer(x, 32, 32, 'layer1')
 
 	with tf.name_scope('dropout'):
 		keep_prob = tf.placeholder(tf.float32)
     		tf.summary.scalar('dropout_keep_probability', keep_prob)
     		dropped = tf.nn.dropout(hidden1, keep_prob)
 
-	y = nn_layer(dropped, 500, 10, 'layer2', act=tf.identity)
+	y = nn_layer(dropped, 32, 2, 'layer2', act=tf.identity)
 
 	with tf.name_scope('cross_entropy'):
 	    # The raw formulation of cross-entropy,
@@ -89,8 +89,8 @@ def train():
 	# Merge all the summaries and write them out to
 	# /tmp/tensorflow/mnist/logs/mnist_with_summaries (by default)
 	merged = tf.summary.merge_all()
-	train_writer = tf.summary.FileWriter(FLAGS.log_dir + '/train',sess.graph)
-	test_writer = tf.summary.FileWriter(FLAGS.log_dir + '/test')
+	train_writer = tf.summary.FileWriter(FLAGS.log_dir + '/train',sess.graph)#partie ou gerer les données
+	test_writer = tf.summary.FileWriter(FLAGS.log_dir + '/test')#partie ou gerer les données
 	tf.global_variables_initializer().run()
 
 def feed_dict(train):

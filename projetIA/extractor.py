@@ -80,11 +80,11 @@ def list_string_to_int(liste):
         liste[i] = int(liste[i])
     return liste
 
-#ll = extractor_1("wpbc.data")
-#l = extractor_utils(ll)
-#lll = extractor_res(ll)
-#a = list_string_to_int(lll)
-#b = double_sortie(a)
+ll = extractor_1("wpbc.data")
+l = extractor_utils(ll)
+lll = extractor_res(ll)
+a = list_string_to_int(lll)
+b = double_sortie(a)
 
 #print(a)
 #print("\n")
