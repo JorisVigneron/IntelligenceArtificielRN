@@ -28,10 +28,15 @@ with tf.name_scope('Accuracy'):
 	acc = tf.equal(tf.argmax(pred,1),tf.argmax(y,1))
 	acc = tf.reduce_mean(tf.cast(acc,tf.float32))
     
+tf.summary.scalar("loss",cost)
+tf.summary.scalar("accuracy",acc)
+merged_summary_op = tf.summary.merge_all()
+
 init = tf.global_variables_initializer()
 #start training
 with tf.Session() as sess:
     sess.run(init)							#run de linit
+    summary_writer = tf.summary.FileWriter(logs_path, graph=tf.get_default_graph())
     ll = ext.extractor_1("wpbc.data")
     l = ext.extractor_utils(ll)
     lll = ext.extractor_res(ll)
@@ -44,11 +49,11 @@ with tf.Session() as sess:
     test_x = le[batch_size:]
     batch_y = b[:batch_size]
     test_y = b[batch_size:]
-    print(len(b))
     for epoch in range(training_epochs):
         avg_cost = 0.
 
-        _, c = sess.run([optimizer, cost],feed_dict={x:batch_x , y:batch_y})
+        _, c, summary = sess.run([optimizer, cost, merged_summary_op],feed_dict={x:batch_x , y:batch_y})
+        summary_writer.add_summary(summary, epoch * batch_size)
         avg_cost += c / batch_size
         if(epoch+1) % display_epoch == 0:
             print("Epoch:", '%04d' % (epoch+1), "cost=", "{:.9f}", format(avg_cost))
