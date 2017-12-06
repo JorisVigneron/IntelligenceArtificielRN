@@ -8,8 +8,8 @@ batch_size = 150
 display_epoch = 1
 logs_path = '/tmp/tensorflow_logs/rdn/'
 
-x = tf.placeholder(tf.float32, [None, 32], name='InputData')
-y = tf.placeholder(tf.float32, [None, 2], name='LabelData')
+x = tf.placeholder(tf.float32, [None, 32])
+y = tf.placeholder(tf.float32, [None, 2])
 
 w = tf.Variable(tf.zeros([32,2]), name='weights')
 b = tf.Variable(tf.zeros([2]), name='bias')
@@ -35,33 +35,29 @@ merged_summary_op = tf.summary.merge_all()
 
 with tf.Session() as sess:
 
-	sess.run(init)
-	summary_writer = tf.summary.FileWriter(logs_path, graph=tf.get_default_graph())
-	
-    	ll = ext.extractor_1("wpbc.data")
-    	l = ext.extractor_utils(ll)
-    	lll = ext.extractor_res(ll)
-    	a = ext.list_string_to_int(lll)
-    	b = ext.double_sortie(a)
-    	batch_x = l[:150]
-    	test_x = l[150:]
-    	batch_y = b[:150]
-    	test_y = b[150:]
-	
-	for epoch in range(training_epochs):
-		avg_cost = 0.
+    sess.run(init)
+    summary_writer = tf.summary.FileWriter(logs_path, graph=tf.get_default_graph())
+    ll = ext.extractor_1("wpbc.data")
+    l = ext.extractor_utils(ll)
+    lll = ext.extractor_res(ll)
+    le = ext.list_list_string_to_int(l)
+    a = ext.list_string_to_int(lll)
+    b = ext.double_sortie(a)
+    batch_x = le[:150]
+    test_x = le[150:]
+    batch_y = b[:150]
+    test_y = b[150:]
+    for epoch in range(training_epochs):
+        avg_cost = 0.
 		#batch
 		
-		_, c, summary = sess.run([optimizer, cost, merged_summary_op],feed_dict={x:batch_x , y:batch_y})
-		summary_writer.add_summary(summary, epoch * 150)
-		avg_cost += c / 150
-		if(epoch+1) % display_epoch == 0:
-			print("Epoch:", '%04d' % (epoch+1), "cost=", "{:.9f}", format(avg_cost))
-	
-	print("Optimization finished")
-
-	
-	print("Accuracy:", acc.eval({x:test_x , y:test_y}))
-	print("Run the command line:\n" \
+        _, c, summary = sess.run([optimizer, cost, merged_summary_op],feed_dict={x:batch_x , y:batch_y})
+        summary_writer.add_summary(summary, epoch * 150)
+        avg_cost += c / 150
+        if(epoch+1) % display_epoch == 0:
+            print("Epoch:", '%04d' % (epoch+1), "cost=", "{:.9f}", format(avg_cost))
+            print("Optimization finished")
+            #print("Accuracy:", acc.eval({x:test_x , y:test_y}))
+            print("Run the command line:\n" \
 		"--> tensorboard --logdir=/tmp/tensorflow_logs " \
 "\nThen open http://0.0.0.0:6006/ into your web browser")
