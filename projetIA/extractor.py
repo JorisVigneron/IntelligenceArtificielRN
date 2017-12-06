@@ -57,23 +57,28 @@ def extractor_res(liste):
     return l
 
 def double_sortie(liste):
-    
     l2 = []
     for i in range(0, len(liste)):
-	l1 = []	
-	if liste[i] == 1 :
-		l1.append(1)
-		l1.append(0)
-	elif liste[i] == 0 :
-		l1.append(0)
-		l1.append(1)
-	l2.append(l1)
-	del l1
+        l1 = []	
+        if liste[i] == 1 :
+            l1.append(1)
+            l1.append(0)
+        elif liste[i] == 0 :
+                l1.append(0)
+                l1.append(1)
+        l2.append(l1)
+        del l1
     return l2
 
 #
 # Convertion string to int pour les listes
 #
+    
+def list_list_string_to_int(liste):
+    for i in range(len(liste)):
+        for j in range(len(liste[1])):
+            liste[i][j] = float(liste[i][j])
+    return liste
 
 def list_string_to_int(liste):
     for i in range(len(liste)):
