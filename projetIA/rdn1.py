@@ -15,13 +15,15 @@ w = tf.Variable(tf.zeros([32,2]), name='weights')
 b = tf.Variable(tf.zeros([2]), name='bias')
 
 with tf.name_scope('Model'):
-	pred = tf.nn.softmax(tf.matmul(x,w) + b)
+	pred = tf.nn.relu(tf.matmul(x,w) + b)
+	print(pred)
 
 with tf.name_scope('Loss'):
 	cost = tf.reduce_mean(-tf.reduce_sum(y*tf.log(pred), reduction_indices=1))
 
 with tf.name_scope('SGD'):
 	optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
+	#optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(cost)		
 
 with tf.name_scope('Accuracy'):
 	acc = tf.equal(tf.argmax(pred,1),tf.argmax(y,1))
@@ -53,6 +55,9 @@ with tf.Session() as sess:
 		#batch
 		
 		_, c, summary = sess.run([optimizer, cost, merged_summary_op],feed_dict={x:batch_x , y:batch_y})
+		print("\n c : ")
+		print(c)
+		print("\n")
 		summary_writer.add_summary(summary, epoch * 150)
 		avg_cost += c / 150
 		if(epoch+1) % display_epoch == 0:
