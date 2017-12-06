@@ -1,5 +1,6 @@
-from __futur__ import print_function
+from __future__ import print_function
 import tensorflow as tf
+import extractor as ext
 
 learning_rate = 0.01
 training_epochs = 25
@@ -11,7 +12,7 @@ x = tf.placeholder(tf.float32, [None, 32], name='InputData')
 y = tf.placeholder(tf.float32, [None, 2], name='LabelData')
 
 w = tf.Variable(tf.zeros([32,2]), name='weights')
-b = tf.Variable(tfzeros([2]), name='bias')
+b = tf.Variable(tf.zeros([2]), name='bias')
 
 with tf.name_scope('Model'):
 	pred = tf.nn.softmax(tf.matmul(x,w) + b)
