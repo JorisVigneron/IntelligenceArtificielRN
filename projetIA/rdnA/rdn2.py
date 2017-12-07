@@ -9,20 +9,27 @@ batch_size = 150
 display_epoch = 1
 logs_path = '/tmp/tensorflow_logs/rdn/'
 
+n_hidden_1 = 50
+
 x = tf.placeholder(tf.float32, [None, 32], name = "InputData")
 y = tf.placeholder(tf.float32, [None, 2], name = "OutputData")
 
-w = tf.Variable(tf.zeros([32, 2]), name='weights')
-b = tf.Variable(tf.zeros([2]), name='bias')
+w = {
+	'h1' : tf.Variable(tf.zeros([32, n_hidden_1])),
+	'out' : tf.Variable(tf.zeros([n_hidden_1, 2]))
+}
 
+b = {
+	'b1' : tf.Variable(tf.zeros([n_hidden_1])),
+	'out' : tf.Variable(tf.zeros([2]))
+}
 with tf.name_scope('Model'):
-	pred = tf.nn.softmax(tf.matmul(x,w) + b)
+	layer1 = tf.nn.softmax(tf.matmul(x,w['h1']) + b['b1'])
+	pred = tf.nn.softmax(tf.matmul(layer1, w['out']) + b['out'])
 
 with tf.name_scope('Loss'):
-	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
     cost = -tf.reduce_sum(y*tf.log(tf.clip_by_value(pred,1e-10,1.0)))
 	 #cost = tf.reduce_mean(-tf.reduce_sum(y*tf.log(pred), reduction_indices=1))
-
 
 with tf.name_scope('SGD'):
 	optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
