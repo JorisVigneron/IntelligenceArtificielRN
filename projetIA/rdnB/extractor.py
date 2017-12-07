@@ -1,4 +1,4 @@
-
+import random
 #
 # Parser de fichier .data fournit par l'enseignant
 #
@@ -38,12 +38,24 @@ def extractor_1(file):
 def extractor_utils(liste):
     l = []
     a = []
-    for i in range(0,len(liste)-1):
+    for i in range(0,len(liste)):
         a = liste[i][2::]
         w = [a]
         l.extend(w)
     return l
 
+def upgrade_list(liste1, liste2, size):
+    l1 = liste1
+    l2 = liste2
+    for i in range(len(liste1),size):
+        a = random.randint(2,6)
+        b = random.randint(1,10)
+        k = []
+        for j in range(len(liste1[1])):
+            k.append(liste1[b][j]*(a/100))
+        l1.append(k)
+        l2.append(liste2[b])
+    return l1, l2
 #
 # Extrait le batch des sorties sous forme de liste de string
 #
@@ -51,7 +63,7 @@ def extractor_utils(liste):
 def extractor_res(liste):
     l = []
     a = []
-    for i in range(0,len(liste)-1):
+    for i in range(0,len(liste)):
         a = liste[i][1]
         l.extend(a)
     return l
@@ -85,11 +97,6 @@ def list_string_to_int(liste):
         liste[i] = int(liste[i])
     return liste
 
-#ll = extractor_1("wpbc.data")
-#l = extractor_utils(ll)
-#lll = extractor_res(ll)
-#a = list_string_to_int(lll)
-#b = double_sortie(a)
 
 #print(a)
 #print("\n")

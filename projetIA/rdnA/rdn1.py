@@ -57,5 +57,5 @@ with tf.Session() as sess:
         summary_writer.add_summary(summary, epoch * batch_size)
         avg_cost += c / batch_size
         if(epoch+1) % display_epoch == 0:
-            print("Epoch:", '%04d' % (epoch+1), "cost=", "{:.9f}", format(avg_cost))
+            print("Epoch:", '%04d' % (epoch+1), "cost= %s" % avg_cost)
     print("Accuracy:", acc.eval({x:test_x , y:test_y}))

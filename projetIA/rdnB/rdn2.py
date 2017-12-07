@@ -3,20 +3,29 @@ from __future__ import print_function
 import tensorflow as tf
 import extractor as ext
 
-learning_rate = 0.0001
+learning_rate = 0.1
 training_epochs = 25
-batch_size = 200
+batch_size = 300
 display_epoch = 1
 logs_path = '/tmp/tensorflow_logs/rdn/'
+
+n_hidden_1 = 20
 
 x = tf.placeholder(tf.float32, [None, 29], name = "InputData")
 y = tf.placeholder(tf.float32, [None, 2], name = "OutputData")
 
-w = tf.Variable(tf.zeros([29, 2]), name='weights')
-b = tf.Variable(tf.zeros([2]), name='bias')
+w = {
+	'h1' : tf.Variable(tf.zeros([29, n_hidden_1])),
+	'out' : tf.Variable(tf.zeros([n_hidden_1, 2]))
+}
 
+b = {
+	'b1' : tf.Variable(tf.zeros([n_hidden_1])),
+	'out' : tf.Variable(tf.zeros([2]))
+}
 with tf.name_scope('Model'):
-	pred = tf.nn.softmax(tf.matmul(x,w) + b)
+	layer1 = tf.matmul(x,w['h1']) + b['b1']
+	pred = tf.matmul(layer1, w['out']) + b['out']
 
 with tf.name_scope('Loss'):
     cost = -tf.reduce_sum(y*tf.log(tf.clip_by_value(pred,1e-10,1.0)))
@@ -53,10 +62,9 @@ with tf.Session() as sess:
     test_y = b[batch_size:]
     for epoch in range(training_epochs):
         avg_cost = 0.
-
         _, c, summary = sess.run([optimizer, cost, merged_summary_op],feed_dict={x:batch_x , y:batch_y})
         summary_writer.add_summary(summary, epoch * batch_size)
         avg_cost += c / batch_size
         if(epoch+1) % display_epoch == 0:
-            print("Epoch:", '%04d' % (epoch+1), "cost=", "{:.9f}", format(avg_cost))
+            print("Epoch:", '%04d' % (epoch+1), "cost= %s" % avg_cost)
             print("Accuracy:", acc.eval({x:test_x , y:test_y}))
