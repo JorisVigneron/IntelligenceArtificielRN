@@ -4,7 +4,7 @@ import tensorflow as tf
 import extractor as ext
 
 learning_rate = 0.01
-training_epochs = 250
+training_epochs = 1000
 batch_size = 150
 display_epoch = 1
 logs_path = '/tmp/tensorflow_logs/rdn/'
@@ -52,7 +52,7 @@ with tf.Session() as sess:
     lll = ext.extractor_res(ll)
     a = ext.list_string_to_int(lll)
     le = ext.list_list_string_to_int(l)
-    #le, a = ext.upgrade_list(le, a, 1000)
+    le, a = ext.upgrade_list(le, a, 1000)
     b = ext.double_sortie(a)
     le = tf.nn.l2_normalize(le, 1, epsilon=1e-12)
     le = le.eval()

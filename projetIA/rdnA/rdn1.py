@@ -19,9 +19,9 @@ with tf.name_scope('Model'):
 	pred = tf.nn.softmax(tf.matmul(x,w) + b)
 
 with tf.name_scope('Loss'):
-	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
-    cost = -tf.reduce_sum(y*tf.log(tf.clip_by_value(pred,1e-10,1.0)))
-	 #cost = tf.reduce_mean(-tf.reduce_sum(y*tf.log(pred), reduction_indices=1))
+	#cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
+    	cost = -tf.reduce_sum(y*tf.log(tf.clip_by_value(pred,1e-10,1.0)))
+	#cost = tf.reduce_mean(-tf.reduce_sum(y*tf.log(pred), reduction_indices=1))
 
 
 with tf.name_scope('SGD'):
@@ -45,7 +45,7 @@ with tf.Session() as sess:
     lll = ext.extractor_res(ll)
     a = ext.list_string_to_int(lll)
     le = ext.list_list_string_to_int(l)
-    #le, a = ext.upgrade_list(le, a, 1000)
+    le, a = ext.upgrade_list(le, a, 1000)
     b = ext.double_sortie(a)
     le = tf.nn.l2_normalize(le, 1, epsilon=1e-12)
     le = le.eval()
