@@ -19,7 +19,7 @@ with tf.name_scope('Model'):
 	pred = tf.nn.softmax(tf.matmul(x,w) + b)
 
 with tf.name_scope('Loss'):
-    cost = -tf.reduce_sum(y*tf.log(tf.clip_by_value(pred,1e-10,1.0)))
+    	cost = -tf.reduce_sum(y*tf.log(tf.clip_by_value(pred,1e-10,1.0)))
 	 #cost = tf.reduce_mean(-tf.reduce_sum(y*tf.log(pred), reduction_indices=1))
 
 with tf.name_scope('SGD'):
