@@ -4,12 +4,12 @@ import tensorflow as tf
 import extractor as ext
 
 learning_rate = 0.01
-training_epochs = 25
+training_epochs = 500
 batch_size = 200
 display_epoch = 1
 logs_path = '/tmp/tensorflow_logs/rdn/'
 
-n_hidden_1 = 256
+n_hidden_1 = 120
 
 x = tf.placeholder(tf.float32, [None, 29], name = "InputData")
 y = tf.placeholder(tf.float32, [None, 2], name = "OutputData")
