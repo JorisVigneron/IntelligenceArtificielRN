@@ -3,7 +3,7 @@ from __future__ import print_function
 import tensorflow as tf
 import extractor as ext
 
-learning_rate = 0.0001
+learning_rate = 0.01
 training_epochs = 25
 batch_size = 200
 display_epoch = 1

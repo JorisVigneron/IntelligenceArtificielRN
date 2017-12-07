@@ -3,13 +3,13 @@ from __future__ import print_function
 import tensorflow as tf
 import extractor as ext
 
-learning_rate = 0.1
+learning_rate = 0.01
 training_epochs = 25
-batch_size = 300
+batch_size = 200
 display_epoch = 1
 logs_path = '/tmp/tensorflow_logs/rdn/'
 
-n_hidden_1 = 20
+n_hidden_1 = 256
 
 x = tf.placeholder(tf.float32, [None, 29], name = "InputData")
 y = tf.placeholder(tf.float32, [None, 2], name = "OutputData")
@@ -24,8 +24,8 @@ b = {
 	'out' : tf.Variable(tf.zeros([2]))
 }
 with tf.name_scope('Model'):
-	layer1 = tf.matmul(x,w['h1']) + b['b1']
-	pred = tf.matmul(layer1, w['out']) + b['out']
+	layer1 = tf.nn.softmax(tf.matmul(x,w['h1']) + b['b1'])
+	pred = tf.nn.softmax(tf.matmul(layer1, w['out']) + b['out'])
 
 with tf.name_scope('Loss'):
     cost = -tf.reduce_sum(y*tf.log(tf.clip_by_value(pred,1e-10,1.0)))
@@ -52,7 +52,7 @@ with tf.Session() as sess:
     lll = ext.extractor_res(ll)
     a = ext.list_string_to_int(lll)
     le = ext.list_list_string_to_int(l)
-    le, a = ext.upgrade_list(le, a, 1000)
+    #le, a = ext.upgrade_list(le, a, 1000)
     b = ext.double_sortie(a)
     le = tf.nn.l2_normalize(le, 1, epsilon=1e-12)
     le = le.eval()
