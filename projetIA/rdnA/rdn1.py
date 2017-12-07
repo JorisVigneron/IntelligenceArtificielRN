@@ -19,7 +19,8 @@ with tf.name_scope('Model'):
 	pred = tf.nn.softmax(tf.matmul(x,w) + b)
 
 with tf.name_scope('Loss'):
-	cost = tf.reduce_mean(-tf.reduce_sum(y*tf.log(pred), reduction_indices=1))
+	#cost = tf.reduce_mean(-tf.reduce_sum(y*tf.log(pred), reduction_indices=1))
+	cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=pred, labels=y))
 
 with tf.name_scope('SGD'):
 	optimizer = tf.train.GradientDescentOptimizer(learning_rate).minimize(cost)
