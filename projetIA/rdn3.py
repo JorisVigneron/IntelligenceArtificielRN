@@ -41,8 +41,9 @@ with tf.Session() as sess:
     l = ext.extractor_utils(ll)
     lll = ext.extractor_res(ll)
     a = ext.list_string_to_int(lll)
-    b = ext.double_sortie(a)
     le = ext.list_list_string_to_int(l)
+    le, b = ext.upgrade_list(le, a, 100)
+    b = ext.double_sortie(a)
     le = tf.nn.l2_normalize(le, 1, epsilon=1e-12)
     le = le.eval()
     batch_x = le[:batch_size]
