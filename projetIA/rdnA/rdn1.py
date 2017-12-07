@@ -4,8 +4,8 @@ import tensorflow as tf
 import extractor as ext
 
 learning_rate = 0.01
-training_epochs = 25
-batch_size = 150
+training_epochs = 15
+batch_size = 200
 display_epoch = 1
 logs_path = '/tmp/tensorflow_logs/rdn/'
 
@@ -41,8 +41,9 @@ with tf.Session() as sess:
     l = ext.extractor_utils(ll)
     lll = ext.extractor_res(ll)
     a = ext.list_string_to_int(lll)
-    b = ext.double_sortie(a)
     le = ext.list_list_string_to_int(l)
+    le, a = ext.upgrade_list(le, a, 1000)
+    b = ext.double_sortie(a)
     le = tf.nn.l2_normalize(le, 1, epsilon=1e-12)
     le = le.eval()
     batch_x = le[:batch_size]
@@ -57,4 +58,4 @@ with tf.Session() as sess:
         avg_cost += c / batch_size
         if(epoch+1) % display_epoch == 0:
             print("Epoch:", '%04d' % (epoch+1), "cost=", "{:.9f}", format(avg_cost))
-            print("Accuracy:", acc.eval({x:test_x , y:test_y}))
+    print("Accuracy:", acc.eval({x:test_x , y:test_y}))
