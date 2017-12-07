@@ -4,7 +4,7 @@ import tensorflow as tf
 import extractor as ext
 
 learning_rate = 0.01
-training_epochs = 25
+training_epochs = 100
 batch_size = 150
 display_epoch = 1
 logs_path = '/tmp/tensorflow_logs/rdn/'
